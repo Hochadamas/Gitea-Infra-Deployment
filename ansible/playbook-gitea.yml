@@ -1,0 +1,76 @@
+---
+- name: Configure Gitea server
+  hosts: gitea_server
+  become: true
+
+  tasks:
+    - name: Update dnf cache
+      dnf:
+        update_cache: true
+
+    - name: Install Docker
+      dnf:
+        name: docker
+        state: present
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Install pip
+      dnf:
+        name: python3-pip
+        state: present
+
+    - name: Install Docker Python module
+      pip:
+        name:
+          - "docker>=6.1.0"
+          - "requests==2.31.0"
+        state: present
+        extra_args: --ignore-installed
+
+    - name: Remove existing Gitea container if present
+      docker_container:
+        name: gitea
+        state: absent
+
+    - name: Run Gitea container
+      docker_container:
+        name: gitea
+        image: gitea/gitea:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "80:3000"
+          - "222:22"
+        env:
+          GITEA__database__DB_TYPE: "postgres"
+          GITEA__database__HOST: "{{ db_host }}:{{ db_port }}"
+          GITEA__database__NAME: "{{ db_name }}"
+          GITEA__database__USER: "{{ db_user }}"
+          GITEA__database__PASSWD: "{{ db_password }}"
+          GITEA__security__INSTALL_LOCK: "true"
+          GITEA__security__SECRET_KEY: "{{ gitea_secret_key }}"
+          GITEA__server__ROOT_URL: "http://{{ ansible_host }}/"
+          GITEA__server__DOMAIN: "{{ ansible_host }}"
+
+    - name: Wait for Gitea to be ready
+      wait_for:
+        host: "127.0.0.1"
+        port: 80
+        delay: 10
+        timeout: 120
+    - name: Create Gitea admin user
+      command: >
+        docker exec -u git gitea gitea admin user create
+        --username {{ gitea_admin_user }}
+        --password {{ gitea_admin_password }}
+        --email {{ gitea_admin_email }}
+        --admin
+      register: admin_creation
+      changed_when: "'already exists' not in admin_creation.stderr"
+      failed_when: >
+        admin_creation.rc != 0 and 'already exists' not in admin_creation.stderr

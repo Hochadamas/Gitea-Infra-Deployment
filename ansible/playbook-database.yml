@@ -1,0 +1,51 @@
+---
+- name: Configure database server
+  hosts: database_server
+  become: true
+
+  tasks:
+    - name: Update dnf cache
+      dnf:
+        update_cache: true
+
+    - name: Install Docker
+      dnf:
+        name: docker
+        state: present
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Install pip
+      dnf:
+        name: python3-pip
+        state: present
+
+    - name: Install Docker Python module
+      pip:
+        name:
+          - "docker>=6.1.0"
+          - "requests==2.31.0"
+        state: present
+        extra_args: --ignore-installed
+
+    - name: Remove existing PostgreSQL container if present
+      docker_container:
+        name: postgres
+        state: absent
+
+    - name: Run PostgreSQL container
+      docker_container:
+        name: postgres
+        image: postgres:16
+        state: started
+        restart_policy: always
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: "{{ db_name }}"
+          POSTGRES_USER: "{{ db_user }}"
+          POSTGRES_PASSWORD: "{{ db_password }}"

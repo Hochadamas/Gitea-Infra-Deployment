@@ -1,0 +1,5 @@
+---
+db_host: "10.0.2.199"
+db_port: 5432
+db_name: "gitea"
+db_user: "gitea"

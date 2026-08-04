@@ -165,6 +165,14 @@ resource "aws_security_group" "database" {
     security_groups = [aws_security_group.web_ssh.id]
   }
 
+  ingress {
+    description     = "SSH from Gitea only (for Ansible ProxyJump)"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.web_ssh.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
