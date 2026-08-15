@@ -15,10 +15,10 @@ The sample application deployed is [Gitea](https://about.gitea.com/), a lightwei
 1. **Networking & Linux fundamentals** - IP addressing, subnetting, routing, SSH, permissions
 2. **AWS manual setup** - VPC, subnets, security groups, EC2 (created manually first, to understand each component before automating)
 3. **Terraform** - Infrastructure as Code, translating the manual setup into reusable code
-4. **Ansible** *(in progress)* - automated configuration of EC2 instances
-5. **Docker** *(in progress)* - containerizing the Gitea application
-6. **GitLab CI/CD** *(planned)* - automated pipeline for infrastructure and application deployment
-7. **Harbor** *(planned)* - container registry
+4. **Ansible** - automated configuration of EC2 instances
+5. **Docker** - containerizing the Gitea application
+6. **GitLab CI/CD** - automated pipeline for infrastructure and application deployment
+7. **Harbor** - container registry
 8. **Kubernetes (EKS)** *(planned)* - final orchestration layer
 ## Learning resources
 
@@ -46,7 +46,7 @@ The database instance is only reachable from the Gitea server's security group, 
 - **Cloud provider**: AWS (VPC, EC2, NAT Gateway, Security Groups)
 - **Application**: Gitea (self-hosted Git service)
 - **Database**: PostgreSQL
-- Coming soon: Ansible, Docker, GitLab CI/CD, Harbor, Kubernetes (EKS)
+- Coming soon: Kubernetes (EKS)
 ## Deployment
 
 ```bash
