@@ -1,0 +1,8 @@
+stages:
+  - scan
+
+scan-gitea-image:
+  stage: scan
+  image: aquasec/trivy:latest
+  script:
+    - trivy image --severity HIGH,CRITICAL gitea/gitea:latest
