@@ -3,6 +3,8 @@ stages:
 
 scan-gitea-image:
   stage: scan
-  image: aquasec/trivy:latest
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
   script:
     - trivy image --severity HIGH,CRITICAL gitea/gitea:latest
