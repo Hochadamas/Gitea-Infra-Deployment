@@ -124,7 +124,7 @@ terraform destroy
 
 ## Project Status
 
-Complete — End-to-end infrastructure pipeline deployed and validated on AWS EKS.
+Complete: End-to-end infrastructure pipeline deployed and validated on AWS EKS.
 
 ## License
 
