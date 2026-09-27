@@ -81,7 +81,7 @@ Kept in the Terraform code (commented out) for comparison purposes. The database
 
 - Terraform ≥ 1.x
 - AWS CLI configured with valid credentials
-- `kubectl`
+- kubectl
 - AWS Account (Note: EKS Control Plane incurs standard hourly charges)
 
 ### 1. Provision Infrastructure
@@ -122,12 +122,6 @@ To teardown all active AWS resources and avoid ongoing charges (EKS control plan
 ```bash
 terraform destroy
 ```
-
-## Planned Enhancements
-
-- Host Harbor on a dedicated AWS instance and push scanned images to it directly from the GitLab pipeline.
-- Point the Kubernetes deployment to Harbor as a pull-through cache instead of Docker Hub directly.
-- Expose Gitea through an AWS ALB Ingress Controller instead of `kubectl port-forward`.
 
 ## Project Status
 
