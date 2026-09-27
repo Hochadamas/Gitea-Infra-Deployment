@@ -32,3 +32,9 @@ variable "my_ip" {
   description = "Your public IP, used to restrict SSH access"
   type        = string
 }
+
+variable "private_subnet_2_cidr" {
+  description = "CIDR block for the second private subnet (2nd AZ, required by EKS)"
+  type        = string
+  default     = "10.0.4.0/24"
+}
