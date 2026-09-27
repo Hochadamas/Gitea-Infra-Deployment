@@ -44,15 +44,14 @@ EKS Cluster Topology
 
 ### Legacy Setup: Standalone EC2 (Steps 2–4)
 
-​```
+```
 VPC (10.0.0.0/16)
 ├── Public subnet (10.0.1.0/24)
 │   ├── EC2: Gitea application server
 │   └── NAT Gateway
-│
 └── Private subnet (10.0.2.0/24)
     └── EC2: PostgreSQL database server (not exposed to the internet)
-​```
+```
 
 Kept in the Terraform code (commented out) for comparison purposes. The database instance was only reachable from the Gitea server's security group.
 
