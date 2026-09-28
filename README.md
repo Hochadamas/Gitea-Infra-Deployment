@@ -1,5 +1,7 @@
 # Gitea Infrastructure Deployment
 
+[![Pipeline Status](https://gitlab.com/Hochadamas/Gitea-Infra-Deployment/badges/main/pipeline.svg)](https://gitlab.com/Hochadamas/Gitea-Infra-Deployment/-/pipelines)
+
 ## 概要
 
 AWS上にGiteaおよびPostgreSQLを段階的にデプロイしたDevOpsプロジェクトです。ネットワークの基礎構築から始まり、TerraformによるIaC化、Ansibleでの構成管理、Docker/Harborでのコンテナ化、GitLab CI/CDでのセキュリティスキャン、最終的にAmazon EKS環境への移行までを実装しています。
@@ -16,7 +18,7 @@ The application deployed is [Gitea](https://about.gitea.com/), a lightweight sel
 2. **Terraform (IaC)** — Automated the core infrastructure setup into reusable Terraform code.
 3. **Ansible & Configuration** — Automated Gitea and PostgreSQL setups on EC2; encrypted sensitive variables using Ansible Vault.
 4. **Containerization & Hardening** — Wrote hardened Dockerfiles, configured Docker Compose setups, and ran local image vulnerability audits with Trivy.
-5. **GitLab CI/CD Integration** — Integrated automated pipeline triggers to execute Trivy security scans on every repo push.
+5. **GitLab CI/CD Integration** — plit into two pipelines: an infrastructure pipeline and an application pipeline (automated Trivy security scan on every push, plus automatic deployment to EKS whenever Kubernetes manifests change).
 6. **Harbor Registry** — Configured and tested Harbor locally as a private container registry and scan-on-push repository.
 7. **Kubernetes (EKS)** — Provisioned AWS EKS clusters via Terraform and migrated application components to Kubernetes with EBS CSI storage.
 
@@ -67,13 +69,17 @@ Kept in the Terraform code (commented out) for comparison purposes. The database
 
 ## Repository Structure
 
-```text
-├── terraform/      # Infrastructure as Code (VPC, legacy EC2, EKS)
-├── ansible/        # Playbooks for the EC2-based deployment (Vault-encrypted secrets)
-├── kubernetes/     # Manifests for EKS deployment (StorageClass, PostgreSQL, Gitea)
-└── .gitlab-ci.yml  # CI/CD pipeline (Trivy scan on push)
+​```text
+├── terraform/                      # Infrastructure as Code (VPC, legacy EC2, EKS)
+├── ansible/                        # Playbooks for the EC2-based deployment (Vault-encrypted secrets)
+├── kubernetes/                     # Manifests for EKS deployment (StorageClass, PostgreSQL, Gitea)
+├── .gitlab-ci.yml                  # CI/CD entrypoint (includes the two pipelines below)
+├── .gitlab-ci-infrastructure.yml   # Infra pipeline: terraform validate/plan/apply (manual)
+└── .gitlab-ci-application.yml      # App pipeline: Trivy scan (always) + automatic deploy to EKS
+​```
 
-```
+[View pipeline runs on GitLab →](https://gitlab.com/Hochadamas/Gitea-Infra-Deployment/-/pipelines)
+
 ## Deployment Guide
 
 ### Prerequisites
