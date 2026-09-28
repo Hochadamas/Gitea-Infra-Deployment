@@ -70,13 +70,20 @@ Kept in the Terraform code (commented out) for comparison purposes. The database
 ## Repository Structure
 
 ​```text
-├── terraform/                      # Infrastructure as Code (VPC, legacy EC2, EKS)
-├── ansible/                        # Playbooks for the EC2-based deployment (Vault-encrypted secrets)
-├── kubernetes/                     # Manifests for EKS deployment (StorageClass, PostgreSQL, Gitea)
-├── .gitlab-ci.yml                  # CI/CD entrypoint (includes the two pipelines below)
-├── .gitlab-ci-infrastructure.yml   # Infra pipeline: terraform validate/plan/apply (manual)
-└── .gitlab-ci-application.yml      # App pipeline: Trivy scan (always) + automatic deploy to EKS
+├── terraform/
+├── ansible/
+├── kubernetes/
+├── .gitlab-ci.yml
+├── .gitlab-ci-infrastructure.yml
+└── .gitlab-ci-application.yml
 ​```
+
+- `terraform/` — Infrastructure as Code (VPC, legacy EC2, EKS)
+- `ansible/` — Playbooks for the EC2-based deployment (Vault-encrypted secrets)
+- `kubernetes/` — Manifests for EKS deployment (StorageClass, PostgreSQL, Gitea)
+- `.gitlab-ci.yml` — CI/CD entrypoint (includes the two pipelines below)
+- `.gitlab-ci-infrastructure.yml` — Infra pipeline: terraform validate/plan/apply (manual)
+- `.gitlab-ci-application.yml` — App pipeline: Trivy scan (always) + automatic deploy to EKS
 
 [View pipeline runs on GitLab →](https://gitlab.com/Hochadamas/Gitea-Infra-Deployment/-/pipelines)
 
