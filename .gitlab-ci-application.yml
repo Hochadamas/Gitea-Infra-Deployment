@@ -1,0 +1,30 @@
+scan-gitea-image:
+  stage: app-scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  rules:
+    - changes:
+        - kubernetes/**/*
+    - when: always
+  script:
+    - trivy image --severity HIGH,CRITICAL gitea/gitea:latest
+
+deploy-to-eks:
+  stage: app-deploy
+  image:
+    name: amazon/aws-cli:2.17.0
+    entrypoint: [""]
+  rules:
+    - changes:
+        - kubernetes/**/*
+  needs: ["scan-gitea-image"]
+  before_script:
+    - curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl"
+    - install -m 0755 kubectl /usr/local/bin/kubectl
+    - aws eks update-kubeconfig --name "$EKS_CLUSTER_NAME" --region "$AWS_DEFAULT_REGION"
+  script:
+    - kubectl apply -f kubernetes/storageclass.yaml
+    - kubectl apply -f kubernetes/postgres.yaml
+    - kubectl apply -f kubernetes/gitea.yaml
+    - kubectl rollout status deployment/gitea --timeout=120s

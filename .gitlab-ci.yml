@@ -1,10 +1,10 @@
 stages:
-  - scan
+  - infra-validate
+  - infra-plan
+  - infra-apply
+  - app-scan
+  - app-deploy
 
-scan-gitea-image:
-  stage: scan
-  image:
-    name: aquasec/trivy:latest
-    entrypoint: [""]
-  script:
-    - trivy image --severity HIGH,CRITICAL gitea/gitea:latest
+include:
+  - local: '.gitlab-ci-infrastructure.yml'
+  - local: '.gitlab-ci-application.yml'

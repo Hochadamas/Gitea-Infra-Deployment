@@ -1,0 +1,39 @@
+terraform-validate:
+  stage: infra-validate
+  image: hashicorp/terraform:1.9
+  rules:
+    - changes:
+        - terraform/**/*
+  script:
+    - cd terraform
+    - terraform init -backend=false
+    - terraform validate
+
+terraform-plan:
+  stage: infra-plan
+  image: hashicorp/terraform:1.9
+  rules:
+    - changes:
+        - terraform/**/*
+  needs: ["terraform-validate"]
+  script:
+    - cd terraform
+    - terraform init
+    - terraform plan -out=tfplan
+  artifacts:
+    paths:
+      - terraform/tfplan
+    expire_in: 1 hour
+
+terraform-apply:
+  stage: infra-apply
+  image: hashicorp/terraform:1.9
+  rules:
+    - changes:
+        - terraform/**/*
+      when: manual
+  needs: ["terraform-plan"]
+  script:
+    - cd terraform
+    - terraform init
+    - terraform apply -auto-approve tfplan
