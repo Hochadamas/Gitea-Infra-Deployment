@@ -14,20 +14,20 @@ The application deployed is [Gitea](https://about.gitea.com/), a lightweight sel
 
 ## Technical Evolution
 
-1. **Networking & EC2 Basics** — Built manual AWS VPC, subnets, routing, and EC2 instances to baseline infrastructure requirements.
-2. **Terraform (IaC)** — Automated the core infrastructure setup into reusable Terraform code.
-3. **Ansible & Configuration** — Automated Gitea and PostgreSQL setups on EC2; encrypted sensitive variables using Ansible Vault.
-4. **Containerization & Hardening** — Wrote hardened Dockerfiles, configured Docker Compose setups, and ran local image vulnerability audits with Trivy.
-5. **GitLab CI/CD Integration** — plit into two pipelines: an infrastructure pipeline and an application pipeline (automated Trivy security scan on every push, plus automatic deployment to EKS whenever Kubernetes manifests change).
-6. **Harbor Registry** — Configured and tested Harbor locally as a private container registry and scan-on-push repository.
-7. **Kubernetes (EKS)** — Provisioned AWS EKS clusters via Terraform and migrated application components to Kubernetes with EBS CSI storage.
+1. **Networking & EC2 Basics** - Built manual AWS VPC, subnets, routing, and EC2 instances to baseline infrastructure requirements.
+2. **Terraform (IaC)** - Automated the core infrastructure setup into reusable Terraform code.
+3. **Ansible & Configuration** - Automated Gitea and PostgreSQL setups on EC2; encrypted sensitive variables using Ansible Vault.
+4. **Containerization & Hardening** - Wrote hardened Dockerfiles, configured Docker Compose setups, and ran local image vulnerability audits with Trivy.
+5. **GitLab CI/CD Integration** - plit into two pipelines: an infrastructure pipeline and an application pipeline (automated Trivy security scan on every push, plus automatic deployment to EKS whenever Kubernetes manifests change).
+6. **Harbor Registry** - Configured and tested Harbor locally as a private container registry and scan-on-push repository.
+7. **Kubernetes (EKS)** - Provisioned AWS EKS clusters via Terraform and migrated application components to Kubernetes with EBS CSI storage.
 
 ## Learning Resources
 
 This project was built while referencing the following resources:
 
-- [Stephane Robert's blog](https://blog.stephane-robert.info/docs/reseaux/) — Networking fundamentals and IaC guides
-- [AWS Fundamentals (YouTube)](https://www.youtube.com/watch?v=7HKot-brXFE) — AWS core concepts
+- [Stephane Robert's blog](https://blog.stephane-robert.info/docs/reseaux/) - Networking fundamentals and IaC guides
+- [AWS Fundamentals (YouTube)](https://www.youtube.com/watch?v=7HKot-brXFE) - AWS core concepts
 
 ## Architecture
 
@@ -69,21 +69,21 @@ Kept in the Terraform code (commented out) for comparison purposes. The database
 
 ## Repository Structure
 
-​```text
+```text
 ├── terraform/
 ├── ansible/
 ├── kubernetes/
 ├── .gitlab-ci.yml
 ├── .gitlab-ci-infrastructure.yml
 └── .gitlab-ci-application.yml
-​```
+```
 
-- `terraform/` — Infrastructure as Code (VPC, legacy EC2, EKS)
-- `ansible/` — Playbooks for the EC2-based deployment (Vault-encrypted secrets)
-- `kubernetes/` — Manifests for EKS deployment (StorageClass, PostgreSQL, Gitea)
-- `.gitlab-ci.yml` — CI/CD entrypoint (includes the two pipelines below)
-- `.gitlab-ci-infrastructure.yml` — Infra pipeline: terraform validate/plan/apply (manual)
-- `.gitlab-ci-application.yml` — App pipeline: Trivy scan (always) + automatic deploy to EKS
+- `terraform/` - Infrastructure as Code (VPC, legacy EC2, EKS)
+- `ansible/` - Playbooks for the EC2-based deployment (Vault-encrypted secrets)
+- `kubernetes/` - Manifests for EKS deployment (StorageClass, PostgreSQL, Gitea)
+- `.gitlab-ci.yml` - CI/CD entrypoint (includes the two pipelines below)
+- `.gitlab-ci-infrastructure.yml` - Infra pipeline: terraform validate/plan/apply (manual)
+- `.gitlab-ci-application.yml` - App pipeline: Trivy scan (always) + automatic deploy to EKS
 
 [View pipeline runs on GitLab →](https://gitlab.com/Hochadamas/Gitea-Infra-Deployment/-/pipelines)
 
